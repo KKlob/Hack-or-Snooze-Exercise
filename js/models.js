@@ -72,6 +72,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
+  // POST to the /stories endpoint with all relevant data. Returns a new story object from the reponse.
   async addStory(user, newStory) {
     const response = await axios({
       url: `${BASE_URL}/stories`,
@@ -81,6 +82,8 @@ class StoryList {
     return new Story(response.data.story);
   }
 
+  // DELETE to the /stories/storyId endpoint where storyId is passed in for a specific story. No response handling needed
+  // remove the story from StoryList object and the user object
   async removeStory(user, storyId) {
     const token = user.loginToken;
     await axios({
@@ -212,6 +215,8 @@ class User {
     }
   }
 
+  // POST to /users/currUser/favorites/storyId endpoint, where storyId is the story added to currUser's favorites.
+  // appends the story to the currUser.favorites array
   async addStoryToFavorites(story) {
     let token = currentUser.loginToken;
     await axios({
@@ -222,6 +227,8 @@ class User {
     currentUser.favorites.push(story);
   }
 
+  //  DELETE to /users/currUser/favorits/storyId endpoint, where storyId is story to remove from currUser's favorites.
+  // also removes the story from currUser.favorites array
   async removeStoryFromFavorites(story) {
     let token = currentUser.loginToken;
     await axios({
@@ -233,6 +240,7 @@ class User {
     currentUser.favorites.splice(storyIndex, 1);
   }
 
+  // checks if storyId is included in currUser's favorites array. Returns True/False
   isFavorite(story) {
     return this.favorites.some(s => s.storyId === story.storyId);
   }

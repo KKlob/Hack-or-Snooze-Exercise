@@ -37,6 +37,7 @@ function updateNavOnLogin() {
 
 $navSubmit.on('click', () => $('#new-story-section').show());
 
+// When favorites button is clicked hide everything and show the favorites html
 function navFavoritesClick(evt) {
   hidePageComponents();
   putFavoritesListOnPage();
@@ -44,6 +45,7 @@ function navFavoritesClick(evt) {
 
 $navFavorites.on('click', navFavoritesClick);
 
+// when my stories is clicked hide everything and show the user's stories page
 function navMyStoriesClick(evt) {
   hidePageComponents();
   putUserStoriesOnPage();

@@ -27,7 +27,7 @@ function generateStoryMarkup(story, showDeleteBtn = false) {
   return $(`
       <li id="${story.storyId}">
         ${showDeleteBtn ? getDeleteBtnHTML() : ""}
-        ${showStar ? getStartHTML(story, currentUser) : ""}
+        ${showStar ? getStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -38,6 +38,7 @@ function generateStoryMarkup(story, showDeleteBtn = false) {
     `);
 }
 
+// returns html for trash can if story was created by user
 function getDeleteBtnHTML() {
   return `
     <span class="trash-can">
@@ -45,7 +46,8 @@ function getDeleteBtnHTML() {
     </span>`;
 }
 
-function getStartHTML(story, user) {
+// return html for star if story is favorited
+function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story);
   const starType = isFavorite ? "fas" : "far";
   return `
@@ -70,6 +72,7 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
+// when a trash can is clicked, chose the closest parent <li> tag (aka the story), grab the storyId from it, then remove the story from API/storyList and refresh the stories on the page
 async function deleteStory(evt) {
   console.debug("deleteStory");
 
@@ -83,6 +86,9 @@ async function deleteStory(evt) {
 
 $ownStories.on('click', '.trash-can', deleteStory);
 
+// collects all info for the new story, calls for html markup and appends it to the allStoriesList section.
+// pushes the new story to the API
+// hides the new story form after submission and resets the inputs.
 async function submitNewStory(evt) {
   console.debug('submitNewStory');
   evt.preventDefault();
@@ -103,6 +109,9 @@ async function submitNewStory(evt) {
 
 $submitForm.on('submit', submitNewStory);
 
+// Empty the favoritedStories html
+// if there are favorited stories for the user, go through each one and append them to the page.
+// if not, let the user know they have no favorites
 function putFavoritesListOnPage() {
   console.debug('putFavoriesListOnPage');
 
@@ -121,6 +130,7 @@ function putFavoritesListOnPage() {
   $favoritedStories.show();
 }
 
+// Handles the favoriting/unfavoriting of stories
 async function toggleStoryFavorite(evt) {
   console.debug("toggleStoryFavorite");
 
@@ -141,6 +151,9 @@ async function toggleStoryFavorite(evt) {
 
 $allStoriesList.on('click', '.star', toggleStoryFavorite);
 
+// empties ownStories of html
+// if user has stories created by them it will append each one to the page.
+// if not, let the user know they have no created stories
 function putUserStoriesOnPage() {
   console.debug("putUserStoriesOnPage");
 
